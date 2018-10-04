@@ -8,7 +8,7 @@ node {
     }
 
     stage('Build') {
-        dockerImage = docker.build("postfix-grok-patterns")
+        dockerImage = docker.build("rgielen/postfix-grok-patterns")
     }
 
     stage('Test') {
@@ -16,4 +16,11 @@ node {
             sh 'ruby test/test.rb'
         }
     }
+
+    stage('Push') {
+        docker.withRegistry('', 'hub.docker.com-rgielen') {
+            dockerImage.push()
+        }
+    }
+
 }
